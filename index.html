@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroAipe – Marketplace Agrícola</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #2d6a4f;
+    --verde-claro: #52b788;
+    --verde-palido: #d8f3dc;
+    --tierra: #8b5e3c;
+    --tierra-claro: #f4a261;
+    --crema: #fefae0;
+    --oscuro: #1b1b1b;
+    --gris: #6b7280;
+    --blanco: #ffffff;
+    --sombra: 0 4px 24px rgba(45,106,79,0.10);
+    --radio: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--crema);
+    color: var(--oscuro);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--verde);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--crema);
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--tierra-claro); }
+  .nav-btns { display: flex; gap: 10px; align-items: center; }
+  .nav-btn {
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .nav-btn.outline {
+    background: transparent;
+    border: 1.5px solid rgba(254,250,224,0.5);
+    color: var(--crema);
+  }
+  .nav-btn.outline:hover { background: rgba(254,250,224,0.1); }
+  .nav-btn.solid {
+    background: var(--tierra-claro);
+    color: var(--oscuro);
+    font-weight: 600;
+  }
+  .nav-btn.solid:hover { background: #e8934f; }
+  .nav-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--crema);
+    font-size: 0.9rem;
+  }
+  .avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--verde-claro);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem; color: var(--blanco);
+  }
+
+  /* PAGES */
+  .page { display: none; animation: fadeIn 0.3s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--verde) 0%, #1b4332 100%);
+    padding: 60px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2352b788' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--crema);
+    line-height: 1.15;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .hero h1 em { color: var(--tierra-claro); font-style: normal; }
+  .hero p {
+    color: rgba(254,250,224,0.8);
+    font-size: 1.05rem;
+    max-width: 520px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+    position: relative;
+  }
+  .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .btn-primary {
+    background: var(--tierra-claro);
+    color: var(--oscuro);
+    border: none;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-primary:hover { background: #e8934f; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(244,162,97,0.4); }
+  .btn-secondary {
+    background: rgba(254,250,224,0.15);
+    color: var(--crema);
+    border: 1.5px solid rgba(254,250,224,0.4);
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-secondary:hover { background: rgba(254,250,224,0.25); }
+
+  /* STATS */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 28px 24px;
+    background: var(--blanco);
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--verde);
+  }
+  .stat-label { font-size: 0.8rem; color: var(--gris); margin-top: 2px; }
+
+  /* SEARCH */
+  .search-bar {
+    padding: 24px;
+    display: flex;
+    gap: 10px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .search-input {
+    flex: 1;
+    padding: 12px 18px;
+    border: 2px solid #e5e7eb;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--blanco);
+  }
+  .search-input:focus { border-color: var(--verde-claro); }
+  .search-btn {
+    background: var(--verde);
+    color: var(--blanco);
+    border: none;
+    padding: 12px 22px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+  }
+  .search-btn:hover { background: var(--verde-claro); }
+
+  /* CATEGORIAS */
+  .categorias {
+    padding: 0 24px 16px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    max-width: 900px;
+    margin: 0 auto;
+    scrollbar-width: none;
+  }
+  .categorias::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    background: var(--blanco);
+    border: 1.5px solid #e5e7eb;
+    color: var(--gris);
+    padding: 7px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .cat-btn.active, .cat-btn:hover {
+    background: var(--verde-palido);
+    border-color: var(--verde-claro);
+    color: var(--verde);
+    font-weight: 600;
+  }
+
+  /* GRID */
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--oscuro);
+    padding: 16px 24px 12px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+    padding: 0 24px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .card {
+    background: var(--blanco);
+    border-radius: var(--radio);
+    overflow: hidden;
+    box-shadow: var(--sombra);
+    cursor: pointer;
+    transition: all 0.25s;
+    border: 1px solid #f0f0f0;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(45,106,79,0.15); }
+  .card-img {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    position: relative;
+  }
+  .card-badge {
+    position: absolute;
+    top: 10px; left: 10px;
+    background: var(--verde);
+    color: var(--blanco);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 50px;
+  }
+  .card-body { padding: 14px 16px; }
+  .card-cat {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--verde-claro);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .card-farmer { font-size: 0.8rem; color: var(--gris); margin-bottom: 10px; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .card-price {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--verde);
+  }
+  .card-price span { font-size: 0.75rem; font-weight: 400; color: var(--gris); font-family: 'DM Sans', sans-serif; }
+  .card-btn {
+    background: var(--verde-palido);
+    color: var(--verde);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .card-btn:hover { background: var(--verde); color: var(--blanco); }
+
+  /* MODAL / DETALLE */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--blanco);
+    border-radius: 24px;
+    max-width: 520px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-img {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+    border-radius: 24px 24px 0 0;
+  }
+  .modal-body { padding: 24px; }
+  .modal-cat { font-size: 0.75rem; font-weight: 600; color: var(--verde-claro); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .modal-title { font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 900; margin-bottom: 8px; }
+  .modal-price { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 900; color: var(--verde); margin-bottom: 16px; }
+  .modal-desc { color: var(--gris); line-height: 1.6; margin-bottom: 20px; font-size: 0.95rem; }
+  .modal-info { background: var(--crema); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+  .modal-info-row { display: flex; gap: 8px; margin-bottom: 8px; font-size: 0.9rem; }
+  .modal-info-row:last-child { margin-bottom: 0; }
+  .modal-info-label { font-weight: 600; color: var(--oscuro); min-width: 90px; }
+  .modal-info-val { color: var(--gris); }
+  .modal-actions { display: flex; gap: 10px; }
+  .btn-contact {
+    flex: 1;
+    background: var(--verde);
+    color: var(--blanco);
+    border: none;
+    padding: 14px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+  }
+  .btn-contact:hover { background: var(--verde-claro); }
+  .btn-close {
+    background: #f3f4f6;
+    color: var(--gris);
+    border: none;
+    padding: 14px 20px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* AUTH */
+  .auth-wrap {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    background: linear-gradient(160deg, var(--verde-palido) 0%, var(--crema) 100%);
+  }
+  .auth-card {
+    background: var(--blanco);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 8px 40px rgba(45,106,79,0.12);
+  }
+  .auth-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--verde);
+    margin-bottom: 6px;
+  }
+  .auth-logo span { color: var(--tierra-claro); }
+  .auth-sub { color: var(--gris); font-size: 0.9rem; margin-bottom: 28px; }
+  .auth-title { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; }
+  .tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 2px solid #f0f0f0; }
+  .tab {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gris);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tab.active { color: var(--verde); border-bottom-color: var(--verde); }
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--oscuro); }
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--crema);
+  }
+  .form-input:focus { border-color: var(--verde-claro); background: var(--blanco); }
+  .form-select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    background: var(--crema);
+    cursor: pointer;
+  }
+  .btn-full {
+    width: 100%;
+    background: var(--verde);
+    color: var(--blanco);
+    border: none;
+    padding: 14px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+    margin-top: 8px;
+  }
+  .btn-full:hover { background: var(--verde-claro); }
+  .role-btns { display: flex; gap: 10px; margin-bottom: 16px; }
+  .role-btn {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    background: var(--crema);
+  }
+  .role-btn .role-icon { font-size: 1.8rem; display: block; margin-bottom: 4px; }
+  .role-btn.selected { border-color: var(--verde); background: var(--verde-palido); }
+  .role-btn.selected .role-label { color: var(--verde); font-weight: 600; }
+
+  /* PUBLICAR */
+  .publicar-wrap {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+  .publicar-title { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 900; margin-bottom: 6px; }
+  .publicar-sub { color: var(--gris); margin-bottom: 28px; }
+  .publicar-card { background: var(--blanco); border-radius: 20px; padding: 28px; box-shadow: var(--sombra); }
+  .emoji-picker { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .emoji-opt {
+    width: 44px; height: 44px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 1.4rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--crema);
+  }
+  .emoji-opt.selected { border-color: var(--verde); background: var(--verde-palido); }
+  .success-msg {
+    display: none;
+    background: var(--verde-palido);
+    border: 1.5px solid var(--verde-claro);
+    color: var(--verde);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-weight: 600;
+    margin-top: 16px;
+    text-align: center;
+  }
+  .success-msg.show { display: block; animation: fadeIn 0.3s; }
+
+  /* PERFIL */
+  .perfil-wrap { max-width: 600px; margin: 0 auto; padding: 32px 24px; }
+  .perfil-header {
+    background: var(--verde);
+    border-radius: 20px;
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 24px;
+    color: var(--blanco);
+  }
+  .perfil-avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: var(--verde-claro);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--blanco);
+    flex-shrink: 0;
+  }
+  .perfil-name { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 700; }
+  .perfil-role { color: var(--verde-palido); font-size: 0.85rem; margin-top: 2px; }
+  .perfil-badge {
+    margin-top: 8px;
+    background: var(--tierra-claro);
+    color: var(--oscuro);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 50px;
+    display: inline-block;
+  }
+  .perfil-section { background: var(--blanco); border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: var(--sombra); }
+  .perfil-section-title { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; margin-bottom: 14px; color: var(--oscuro); }
+  .perfil-stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .perfil-stat { text-align: center; padding: 12px; background: var(--crema); border-radius: 12px; }
+  .perfil-stat-num { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 900; color: var(--verde); }
+  .perfil-stat-label { font-size: 0.72rem; color: var(--gris); margin-top: 2px; }
+  .btn-logout {
+    width: 100%;
+    background: #fee2e2;
+    color: #dc2626;
+    border: none;
+    padding: 12px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+    margin-top: 8px;
+  }
+  .btn-logout:hover { background: #fecaca; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--oscuro);
+    color: var(--blanco);
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 300;
+    transition: transform 0.3s;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* FOOTER */
+  footer {
+    background: var(--oscuro);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 24px;
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+  footer strong { color: rgba(255,255,255,0.8); }
+
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stats { gap: 20px; }
+    .auth-card { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Agro<span>Aipe</span></div>
+  <div id="navGuest" class="nav-btns">
+    <button class="nav-btn outline" onclick="showPage('login')">Iniciar sesión</button>
+    <button class="nav-btn solid" onclick="showPage('registro')">Registrarse</button>
+  </div>
+  <div id="navUser" class="nav-user" style="display:none">
+    <div class="avatar" id="navAvatar">JD</div>
+    <span id="navName">Juan</span>
+    <button class="nav-btn outline" onclick="showPage('perfil')">Mi perfil</button>
+  </div>
+</nav>
+
+<!-- ===== PÁGINA: INICIO ===== -->
+<div id="page-inicio" class="page active">
+  <div class="hero">
+    <h1>El campo de <em>Aipe</em><br>en tus manos</h1>
+    <p>Conectamos directamente a los pequeños agricultores del municipio de Aipe, Huila, con consumidores. Sin intermediarios.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('registro')">Soy agricultor 🌱</button>
+      <button class="btn-secondary" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Ver productos</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="statProductos">12</div><div class="stat-label">Productos disponibles</div></div>
+    <div class="stat"><div class="stat-num" id="statAgricultores">5</div><div class="stat-label">Agricultores activos</div></div>
+    <div class="stat"><div class="stat-num">Aipe</div><div class="stat-label">Municipio, Huila</div></div>
+  </div>
+
+  <div id="catalogo">
+    <div class="search-bar">
+      <input class="search-input" type="text" placeholder="Buscar productos agrícolas..." id="searchInput" oninput="filtrarProductos()">
+      <button class="search-btn">Buscar</button>
+    </div>
+    <div class="categorias" id="categoriasContainer"></div>
+    <div class="section-title">🌾 Productos disponibles</div>
+    <div class="grid" id="productGrid"></div>
+  </div>
+</div>
+
+<!-- ===== PÁGINA: REGISTRO ===== -->
+<div id="page-registro" class="page">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">Agro<span>Aipe</span></div>
+      <div class="auth-sub">Marketplace agrícola – Aipe, Huila</div>
+      <div class="auth-title">Crear cuenta</div>
+
+      <div style="margin-bottom:16px">
+        <div class="form-label">¿Quién eres?</div>
+        <div class="role-btns">
+          <div class="role-btn selected" id="roleAgri" onclick="selectRole('agricultor')">
+            <span class="role-icon">🌱</span>
+            <span class="role-label">Agricultor</span>
+          </div>
+          <div class="role-btn" id="roleComp" onclick="selectRole('comprador')">
+            <span class="role-icon">🛒</span>
+            <span class="role-label">Comprador</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nombre completo</label>
+        <input class="form-input" type="text" id="regNombre" placeholder="Tu nombre">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input class="form-input" type="email" id="regEmail" placeholder="correo@ejemplo.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" id="regPassword" placeholder="Mínimo 6 caracteres">
+      </div>
+      <div class="form-group" id="municipioGroup">
+        <label class="form-label">Municipio / Vereda</label>
+        <input class="form-input" type="text" id="regMunicipio" placeholder="Ej. Aipe, Vereda La Unión">
+      </div>
+
+      <button class="btn-full" onclick="registrar()">Crear cuenta</button>
+      <div style="text-align:center;margin-top:16px;font-size:0.85rem;color:var(--gris)">
+        ¿Ya tienes cuenta? <a href="#" onclick="showPage('login')" style="color:var(--verde);font-weight:600">Inicia sesión</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PÁGINA: LOGIN ===== -->
+<div id="page-login" class="page">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">Agro<span>Aipe</span></div>
+      <div class="auth-sub">Marketplace agrícola – Aipe, Huila</div>
+      <div class="auth-title">Iniciar sesión</div>
+
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input class="form-input" type="email" id="loginEmail" placeholder="correo@ejemplo.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" id="loginPassword" placeholder="Tu contraseña">
+      </div>
+
+      <button class="btn-full" onclick="login()">Entrar</button>
+      <div style="text-align:center;margin-top:16px;font-size:0.85rem;color:var(--gris)">
+        ¿No tienes cuenta? <a href="#" onclick="showPage('registro')" style="color:var(--verde);font-weight:600">Regístrate</a>
+      </div>
+
+      <div style="margin-top:20px;padding:14px;background:var(--crema);border-radius:12px;font-size:0.82rem;color:var(--gris)">
+        <strong>Demo rápido:</strong> usa cualquier correo y contraseña para ingresar como agricultor de prueba.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PÁGINA: PUBLICAR ===== -->
+<div id="page-publicar" class="page">
+  <div class="publicar-wrap">
+    <div class="publicar-title">Publicar producto</div>
+    <div class="publicar-sub">Agrega tu producto al catálogo de AgroAipe</div>
+
+    <div class="publicar-card">
+      <div class="form-group">
+        <label class="form-label">Ícono del producto</label>
+        <div class="emoji-picker" id="emojiPicker">
+          <div class="emoji-opt selected" onclick="selectEmoji(this,'🍅')">🍅</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🥭')">🥭</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🌽')">🌽</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🍌')">🍌</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🥬')">🥬</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🍋')">🍋</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🫘')">🫘</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🧅')">🧅</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🌿')">🌿</div>
+          <div class="emoji-opt" onclick="selectEmoji(this,'🍓')">🍓</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nombre del producto</label>
+        <input class="form-input" type="text" id="pubNombre" placeholder="Ej. Tomates cherry orgánicos">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoría</label>
+        <select class="form-select" id="pubCategoria">
+          <option value="Verduras">Verduras</option>
+          <option value="Frutas">Frutas</option>
+          <option value="Granos">Granos</option>
+          <option value="Hierbas">Hierbas</option>
+          <option value="Otros">Otros</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Precio (COP por kg)</label>
+        <input class="form-input" type="number" id="pubPrecio" placeholder="Ej. 3500">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cantidad disponible (kg)</label>
+        <input class="form-input" type="number" id="pubCantidad" placeholder="Ej. 50">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-input" id="pubDescripcion" rows="3" placeholder="Cuéntanos sobre tu producto, cómo se cultiva, si es orgánico..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Teléfono de contacto</label>
+        <input class="form-input" type="tel" id="pubTelefono" placeholder="Ej. 3001234567">
+      </div>
+      <button class="btn-full" onclick="publicarProducto()">Publicar en el catálogo</button>
+      <div class="success-msg" id="pubSuccess">✅ ¡Producto publicado exitosamente! Ya aparece en el catálogo.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PÁGINA: PERFIL ===== -->
+<div id="page-perfil" class="page">
+  <div class="perfil-wrap">
+    <div class="perfil-header">
+      <div class="perfil-avatar" id="perfilAvatar">JD</div>
+      <div>
+        <div class="perfil-name" id="perfilName">Juan Díaz</div>
+        <div class="perfil-role" id="perfilRole">Agricultor · Aipe, Huila</div>
+        <div class="perfil-badge" id="perfilBadge">🌱 Agricultor verificado</div>
+      </div>
+    </div>
+
+    <div class="perfil-section">
+      <div class="perfil-section-title">Mis estadísticas</div>
+      <div class="perfil-stat-grid">
+        <div class="perfil-stat">
+          <div class="perfil-stat-num" id="perfilStatProd">0</div>
+          <div class="perfil-stat-label">Productos publicados</div>
+        </div>
+        <div class="perfil-stat">
+          <div class="perfil-stat-num">Aipe</div>
+          <div class="perfil-stat-label">Municipio</div>
+        </div>
+        <div class="perfil-stat">
+          <div class="perfil-stat-num">✅</div>
+          <div class="perfil-stat-label">Cuenta activa</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="perfil-section" id="perfilMisProductos">
+      <div class="perfil-section-title">Mis productos publicados</div>
+      <div id="perfilProductosList"></div>
+    </div>
+
+    <div class="perfil-section">
+      <div class="perfil-section-title">Información de cuenta</div>
+      <div class="modal-info-row"><span class="modal-info-label">Correo:</span><span class="modal-info-val" id="perfilEmail">—</span></div>
+      <div class="modal-info-row"><span class="modal-info-label">Rol:</span><span class="modal-info-val" id="perfilRolInfo">—</span></div>
+      <div class="modal-info-row"><span class="modal-info-label">Municipio:</span><span class="modal-info-val" id="perfilMuni">—</span></div>
+      <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-img" id="modalImg" style="background:#d8f3dc"></div>
+    <div class="modal-body">
+      <div class="modal-cat" id="modalCat"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-price" id="modalPrice"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-info">
+        <div class="modal-info-row"><span class="modal-info-label">Agricultor:</span><span class="modal-info-val" id="modalFarmer"></span></div>
+        <div class="modal-info-row"><span class="modal-info-label">Municipio:</span><span class="modal-info-val" id="modalMuni"></span></div>
+        <div class="modal-info-row"><span class="modal-info-label">Disponible:</span><span class="modal-info-val" id="modalCant"></span></div>
+        <div class="modal-info-row"><span class="modal-info-label">Contacto:</span><span class="modal-info-val" id="modalTel"></span></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-contact" id="modalContactBtn">📞 Contactar agricultor</button>
+        <button class="btn-close" onclick="closeModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>AgroAipe</strong> – Plataforma digital tipo marketplace para el fortalecimiento económico<br>
+  de los pequeños agricultores del municipio de Aipe, Huila.<br>
+  Proyecto de Grado · Ingeniería de Sistemas · UNAD · 2026
+</footer>
+
+<script>
+// ===== ESTADO GLOBAL =====
+let currentUser = null;
+let selectedRole = 'agricultor';
+let selectedEmoji = '🍅';
+let currentCategoria = 'Todos';
+
+// ===== BASE DE DATOS LOCAL (localStorage) =====
+function getUsuarios() { return JSON.parse(localStorage.getItem('agroapie_usuarios') || '[]'); }
+function saveUsuarios(u) { localStorage.setItem('agroapie_usuarios', JSON.stringify(u)); }
+function getProductos() { return JSON.parse(localStorage.getItem('agroapie_productos') || '[]'); }
+function saveProductos(p) { localStorage.setItem('agroapie_productos', JSON.stringify(p)); }
+
+// Productos de muestra
+function initDemoData() {
+  if (getProductos().length === 0) {
+    const demo = [
+      { id: 1, emoji: '🍅', nombre: 'Tomates cherry orgánicos', categoria: 'Verduras', precio: 4200, cantidad: 80, descripcion: 'Tomates cherry cultivados sin pesticidas en la vereda La Florida. Cosecha fresca cada semana.', agricultor: 'María García', municipio: 'Aipe, Huila', telefono: '3201234567' },
+      { id: 2, emoji: '🥭', nombre: 'Mangos Tommy Atkins', categoria: 'Frutas', precio: 2800, cantidad: 200, descripcion: 'Mangos de excelente calidad, dulces y jugosos. Disponibles de marzo a julio.', agricultor: 'Carlos Perdomo', municipio: 'Aipe, Huila', telefono: '3157654321' },
+      { id: 3, emoji: '🌽', nombre: 'Mazorca tierna', categoria: 'Verduras', precio: 1500, cantidad: 150, descripcion: 'Mazorca tierna de cosecha propia, ideal para asar o hervir. Variedad criolla.', agricultor: 'Pedro Ramírez', municipio: 'Aipe, Vereda El Porvenir', telefono: '3189876543' },
+      { id: 4, emoji: '🫘', nombre: 'Frijol rojo cargamanto', categoria: 'Granos', precio: 6500, cantidad: 60, descripcion: 'Frijol cargamanto rojo de primera calidad, cultivado en parcela familiar. Secado natural al sol.', agricultor: 'Ana Torres', municipio: 'Aipe, Huila', telefono: '3104567890' },
+      { id: 5, emoji: '🍋', nombre: 'Limones tahití', categoria: 'Frutas', precio: 1800, cantidad: 300, descripcion: 'Limones jugosos y aromáticos, sin semilla. Producción constante todo el año.', agricultor: 'Luis Medina', municipio: 'Aipe, Vereda La Unión', telefono: '3123456789' },
+      { id: 6, emoji: '🌿', nombre: 'Hierbas aromáticas', categoria: 'Hierbas', precio: 2000, cantidad: 40, descripcion: 'Paquetes de cilantro, albahaca y menta fresca. Cultivadas sin agroquímicos.', agricultor: 'María García', municipio: 'Aipe, Huila', telefono: '3201234567' },
+    ];
+    saveProductos(demo);
+  }
+}
+
+// ===== NAVEGACIÓN =====
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+  if (page === 'inicio') renderProductos();
+  if (page === 'perfil') renderPerfil();
+}
+
+// ===== AUTH =====
+function selectRole(role) {
+  selectedRole = role;
+  document.getElementById('roleAgri').classList.toggle('selected', role === 'agricultor');
+  document.getElementById('roleComp').classList.toggle('selected', role === 'comprador');
+  document.getElementById('municipioGroup').style.display = role === 'agricultor' ? 'block' : 'none';
+}
+
+function registrar() {
+  const nombre = document.getElementById('regNombre').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const municipio = document.getElementById('regMunicipio').value.trim();
+
+  if (!nombre || !email || !password) { showToast('Por favor completa todos los campos'); return; }
+  if (password.length < 6) { showToast('La contraseña debe tener mínimo 6 caracteres'); return; }
+
+  const usuarios = getUsuarios();
+  if (usuarios.find(u => u.email === email)) { showToast('Este correo ya está registrado'); return; }
+
+  const user = { id: Date.now(), nombre, email, password, rol: selectedRole, municipio: municipio || 'Aipe, Huila' };
+  usuarios.push(user);
+  saveUsuarios(usuarios);
+
+  loginUser(user);
+  showToast('¡Bienvenido a AgroAipe, ' + nombre + '!');
+  showPage('inicio');
+}
+
+function login() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  if (!email || !password) { showToast('Completa los campos'); return; }
+
+  const usuarios = getUsuarios();
+  let user = usuarios.find(u => u.email === email && u.password === password);
+
+  // Demo: crear usuario temporal si no existe
+  if (!user) {
+    user = { id: Date.now(), nombre: email.split('@')[0], email, password, rol: 'agricultor', municipio: 'Aipe, Huila' };
+    usuarios.push(user);
+    saveUsuarios(usuarios);
+  }
+
+  loginUser(user);
+  showToast('¡Bienvenido de nuevo, ' + user.nombre + '!');
+  showPage('inicio');
+}
+
+function loginUser(user) {
+  currentUser = user;
+  sessionStorage.setItem('agroapie_session', JSON.stringify(user));
+  updateNav();
+}
+
+function logout() {
+  currentUser = null;
+  sessionStorage.removeItem('agroapie_session');
+  updateNav();
+  showPage('inicio');
+  showToast('Sesión cerrada');
+}
+
+function updateNav() {
+  const guest = document.getElementById('navGuest');
+  const userEl = document.getElementById('navUser');
+  if (currentUser) {
+    guest.style.display = 'none';
+    userEl.style.display = 'flex';
+    const initials = currentUser.nombre.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    document.getElementById('navAvatar').textContent = initials;
+    document.getElementById('navName').textContent = currentUser.nombre.split(' ')[0];
+
+    // Mostrar botón publicar si es agricultor
+    let pubBtn = document.getElementById('navPubBtn');
+    if (!pubBtn && currentUser.rol === 'agricultor') {
+      pubBtn = document.createElement('button');
+      pubBtn.id = 'navPubBtn';
+      pubBtn.className = 'nav-btn solid';
+      pubBtn.textContent = '+ Publicar';
+      pubBtn.onclick = () => showPage('publicar');
+      userEl.insertBefore(pubBtn, userEl.firstChild);
+    }
+  } else {
+    guest.style.display = 'flex';
+    userEl.style.display = 'none';
+    const pubBtn = document.getElementById('navPubBtn');
+    if (pubBtn) pubBtn.remove();
+  }
+}
+
+// ===== PRODUCTOS =====
+const colores = ['#d8f3dc','#fde8d0','#dbeafe','#fef9c3','#f3e8ff','#ffe4e6'];
+
+function renderProductos() {
+  const productos = getProductos();
+  const grid = document.getElementById('productGrid');
+  const search = document.getElementById('searchInput').value.toLowerCase();
+
+  const filtrados = productos.filter(p => {
+    const matchSearch = !search || p.nombre.toLowerCase().includes(search) || p.categoria.toLowerCase().includes(search);
+    const matchCat = currentCategoria === 'Todos' || p.categoria === currentCategoria;
+    return matchSearch && matchCat;
+  });
+
+  grid.innerHTML = filtrados.length === 0
+    ? '<div style="grid-column:1/-1;text-align:center;color:var(--gris);padding:40px">No se encontraron productos</div>'
+    : filtrados.map((p, i) => `
+      <div class="card" onclick="openModal(${p.id})">
+        <div class="card-img" style="background:${colores[i % colores.length]}">
+          ${p.emoji || '🌾'}
+          <div class="card-badge">${p.categoria}</div>
+        </div>
+        <div class="card-body">
+          <div class="card-cat">${p.categoria}</div>
+          <div class="card-title">${p.nombre}</div>
+          <div class="card-farmer">👨‍🌾 ${p.agricultor}</div>
+          <div class="card-footer">
+            <div class="card-price">$${Number(p.precio).toLocaleString()} <span>/ kg</span></div>
+            <button class="card-btn">Ver más</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+  // Stats
+  document.getElementById('statProductos').textContent = productos.length;
+  const agricultores = [...new Set(productos.map(p => p.agricultor))].length;
+  document.getElementById('statAgricultores').textContent = agricultores;
+
+  // Categorías
+  const cats = ['Todos', ...new Set(productos.map(p => p.categoria))];
+  document.getElementById('categoriasContainer').innerHTML = cats.map(c => `
+    <button class="cat-btn ${c === currentCategoria ? 'active' : ''}" onclick="setCat('${c}')">${c}</button>
+  `).join('');
+}
+
+function filtrarProductos() { renderProductos(); }
+function setCat(cat) { currentCategoria = cat; renderProductos(); }
+
+function openModal(id) {
+  const p = getProductos().find(x => x.id === id);
+  if (!p) return;
+  const i = getProductos().indexOf(p);
+  document.getElementById('modalImg').innerHTML = `<span style="font-size:5rem">${p.emoji || '🌾'}</span>`;
+  document.getElementById('modalImg').style.background = colores[i % colores.length];
+  document.getElementById('modalCat').textContent = p.categoria;
+  document.getElementById('modalTitle').textContent = p.nombre;
+  document.getElementById('modalPrice').textContent = '$' + Number(p.precio).toLocaleString() + ' / kg';
+  document.getElementById('modalDesc').textContent = p.descripcion;
+  document.getElementById('modalFarmer').textContent = p.agricultor;
+  document.getElementById('modalMuni').textContent = p.municipio;
+  document.getElementById('modalCant').textContent = p.cantidad + ' kg disponibles';
+  document.getElementById('modalTel').textContent = p.telefono;
+  document.getElementById('modalContactBtn').onclick = () => {
+    showToast('📞 Contactando a ' + p.agricultor + ': ' + p.telefono);
+    closeModal();
+  };
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+
+// ===== PUBLICAR =====
+function selectEmoji(el, emoji) {
+  document.querySelectorAll('.emoji-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedEmoji = emoji;
+}
+
+function publicarProducto() {
+  if (!currentUser) { showToast('Debes iniciar sesión primero'); showPage('login'); return; }
+  if (currentUser.rol !== 'agricultor') { showToast('Solo los agricultores pueden publicar'); return; }
+
+  const nombre = document.getElementById('pubNombre').value.trim();
+  const categoria = document.getElementById('pubCategoria').value;
+  const precio = document.getElementById('pubPrecio').value;
+  const cantidad = document.getElementById('pubCantidad').value;
+  const descripcion = document.getElementById('pubDescripcion').value.trim();
+  const telefono = document.getElementById('pubTelefono').value.trim();
+
+  if (!nombre || !precio || !cantidad || !descripcion) { showToast('Completa todos los campos'); return; }
+
+  const productos = getProductos();
+  const nuevo = {
+    id: Date.now(),
+    emoji: selectedEmoji,
+    nombre, categoria,
+    precio: parseInt(precio),
+    cantidad: parseInt(cantidad),
+    descripcion,
+    agricultor: currentUser.nombre,
+    municipio: currentUser.municipio || 'Aipe, Huila',
+    telefono: telefono || currentUser.telefono || 'No especificado'
+  };
+  productos.push(nuevo);
+  saveProductos(productos);
+
+  document.getElementById('pubSuccess').classList.add('show');
+  ['pubNombre','pubPrecio','pubCantidad','pubDescripcion','pubTelefono'].forEach(id => document.getElementById(id).value = '');
+  setTimeout(() => document.getElementById('pubSuccess').classList.remove('show'), 4000);
+}
+
+// ===== PERFIL =====
+function renderPerfil() {
+  if (!currentUser) { showPage('login'); return; }
+  const initials = currentUser.nombre.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  document.getElementById('perfilAvatar').textContent = initials;
+  document.getElementById('perfilName').textContent = currentUser.nombre;
+  document.getElementById('perfilRole').textContent = (currentUser.rol === 'agricultor' ? 'Agricultor' : 'Comprador') + ' · ' + (currentUser.municipio || 'Aipe, Huila');
+  document.getElementById('perfilBadge').textContent = currentUser.rol === 'agricultor' ? '🌱 Agricultor verificado' : '🛒 Comprador activo';
+  document.getElementById('perfilEmail').textContent = currentUser.email;
+  document.getElementById('perfilRolInfo').textContent = currentUser.rol === 'agricultor' ? 'Agricultor' : 'Comprador';
+  document.getElementById('perfilMuni').textContent = currentUser.municipio || 'Aipe, Huila';
+
+  const misProductos = getProductos().filter(p => p.agricultor === currentUser.nombre);
+  document.getElementById('perfilStatProd').textContent = misProductos.length;
+
+  const lista = document.getElementById('perfilProductosList');
+  if (misProductos.length === 0) {
+    lista.innerHTML = '<div style="color:var(--gris);font-size:0.9rem">Aún no has publicado productos. <a href="#" onclick="showPage(\'publicar\')" style="color:var(--verde);font-weight:600">Publicar ahora</a></div>';
+  } else {
+    lista.innerHTML = misProductos.map(p => `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0">
+        <span style="font-size:1.8rem">${p.emoji}</span>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:0.9rem">${p.nombre}</div>
+          <div style="font-size:0.8rem;color:var(--gris)">$${Number(p.precio).toLocaleString()}/kg · ${p.cantidad}kg disponibles</div>
+        </div>
+        <span style="font-size:0.75rem;background:var(--verde-palido);color:var(--verde);padding:3px 10px;border-radius:50px;font-weight:600">${p.categoria}</span>
+      </div>
+    `).join('');
+  }
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ===== INIT =====
+initDemoData();
+renderProductos();
+
+// Restaurar sesión
+const session = sessionStorage.getItem('agroapie_session');
+if (session) {
+  currentUser = JSON.parse(session);
+  updateNav();
+}
+</script>
+</body>
+</html>

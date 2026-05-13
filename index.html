@@ -605,15 +605,18 @@
 
 <!-- NAV -->
 <nav>
-  <div class="logo">Agro<span>Aipe</span></div>
-  <div id="navGuest" class="nav-btns">
-    <button class="nav-btn outline" onclick="showPage('login')">Iniciar sesión</button>
-    <button class="nav-btn solid" onclick="showPage('registro')">Registrarse</button>
-  </div>
-  <div id="navUser" class="nav-user" style="display:none">
-    <div class="avatar" id="navAvatar">JD</div>
-    <span id="navName">Juan</span>
-    <button class="nav-btn outline" onclick="showPage('perfil')">Mi perfil</button>
+  <div class="logo" onclick="showPage('inicio')" style="cursor:pointer">Agro<span>Aipe</span></div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <button class="nav-btn outline" onclick="showPage('inicio')" style="display:flex;align-items:center;gap:5px">🏠 Catálogo</button>
+    <div id="navGuest" class="nav-btns">
+      <button class="nav-btn outline" onclick="showPage('login')">Iniciar sesión</button>
+      <button class="nav-btn solid" onclick="showPage('registro')">Registrarse</button>
+    </div>
+    <div id="navUser" class="nav-user" style="display:none">
+      <div class="avatar" id="navAvatar">JD</div>
+      <span id="navName">Juan</span>
+      <button class="nav-btn outline" onclick="showPage('perfil')">Mi perfil</button>
+    </div>
   </div>
 </nav>
 
@@ -758,7 +761,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Precio (COP por kg)</label>
+        <label class="form-label">Precio en pesos colombianos (COP) por kg</label>
         <input class="form-input" type="number" id="pubPrecio" placeholder="Ej. 3500">
       </div>
       <div class="form-group">
@@ -1013,7 +1016,7 @@ function renderProductos() {
           <div class="card-title">${p.nombre}</div>
           <div class="card-farmer">👨‍🌾 ${p.agricultor}</div>
           <div class="card-footer">
-            <div class="card-price">$${Number(p.precio).toLocaleString()} <span>/ kg</span></div>
+            <div class="card-price">$${Number(p.precio).toLocaleString()} <span>COP / kg</span></div>
             <button class="card-btn">Ver más</button>
           </div>
         </div>
@@ -1043,7 +1046,7 @@ function openModal(id) {
   document.getElementById('modalImg').style.background = colores[i % colores.length];
   document.getElementById('modalCat').textContent = p.categoria;
   document.getElementById('modalTitle').textContent = p.nombre;
-  document.getElementById('modalPrice').textContent = '$' + Number(p.precio).toLocaleString() + ' / kg';
+  document.getElementById('modalPrice').textContent = '$' + Number(p.precio).toLocaleString() + ' COP / kg';
   document.getElementById('modalDesc').textContent = p.descripcion;
   document.getElementById('modalFarmer').textContent = p.agricultor;
   document.getElementById('modalMuni').textContent = p.municipio;
@@ -1126,7 +1129,7 @@ function renderPerfil() {
         <span style="font-size:1.8rem">${p.emoji}</span>
         <div style="flex:1">
           <div style="font-weight:600;font-size:0.9rem">${p.nombre}</div>
-          <div style="font-size:0.8rem;color:var(--gris)">$${Number(p.precio).toLocaleString()}/kg · ${p.cantidad}kg disponibles</div>
+          <div style="font-size:0.8rem;color:var(--gris)">$${Number(p.precio).toLocaleString()} COP/kg · ${p.cantidad}kg disponibles</div>
         </div>
         <span style="font-size:0.75rem;background:var(--verde-palido);color:var(--verde);padding:3px 10px;border-radius:50px;font-weight:600">${p.categoria}</span>
       </div>
